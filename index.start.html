@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html data-ng-app = "demoApp">
+	<head>
+		<title>Web Application</title>
+	</head>
+	<body>
+		
+		<h1>Angular</h1>
+		Directive - Way to teach HTML new tricks
+		<li>ng-repeat- Used to list all items from ng-init variable</li>
+		<li>filterby & orderBy used with ng-repeat</li>
+		View & Controller: This is a part of the MVC structure. Code sits sepreated from UI
+		<br/><br/>
+
+		<h1>Play Area</h1>
+
+		<div class = "container">
+			Filter <input type="text" data-ng-model="name"/>
+		</div>
+		<br/>
+
+		Contacts ordered by city:
+		<div class = "container" data-ng-init="contacts=[
+			{name:'Arjun Pandiyan',city:'Sunnyvale'},
+			{name:'Raj Singh',city:'San Francisco'},
+			{name:'Nidhi Kanth',city:'Monterey'},
+			{name:'Barath Pandiyan',city:'Arbutus'},
+			{name:'Ganesh Raja',city:'Chennai'}
+			]" >
+			<ul >
+				<li data-ng-repeat="person in contacts | filter:name | orderBy:'city'"> 
+					apply style to li =>> {{ person.name + ', ' + person.city}}
+				</li>
+			</ul>
+		</div>
+		<br/>
+
+		<div class="container" data-ng-controller="SimpleController">
+		Companies sorted by their score:
+			<ul >
+				<li data-ng-repeat="company in companies | orderBy:'score':'reverse'">
+					{{company.companyName + ', located at ' + company.location + ', score: ' + company.score }}
+				</li>
+			</ul>
+		</div>
+		</br>
+		<div>
+			<div data-ng-view = "">
+			</div>
+		</div>
+
+		<script src="angular.min.js"></script> <!--  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script> -->
+		<script src ="angular-route.js"></script> <!-- <script src="//ajax.googleapis.com/ajax/libs/angularjs/X.Y.Z/angular-route.js"/> -->
+		
+		<script>
+			 
+			// Module without any dependencies - Modules are attached to the app
+			var demoApp = angular.module('demoApp',['ngRoute']);
+
+			// List of controllers for this module
+			var appControllers = {};
+
+			// Controller is the area where we store data which can be accessed by the view
+			// This is one of the controller used for this module
+			appControllers.SimpleController = function ($scope) {
+				$scope.companies = [
+				{companyName:'Apple', location:'California', score:9},
+				{companyName:'Microsoft', location:'Seattle', score:8},
+				{companyName:'Google', location:'California', score:9},
+				{companyName:'Yahoo', location:'California', score:6},
+				{companyName:'Facebook', location:'California', score:8},
+				{companyName:'Amazon', location:'Seattle', score:8}
+				];
+			}
+
+			demoApp.controller(appControllers);
+				
+			// This is the config of the app that will help routing to different views on the div tag with data-ng-view
+			demoApp.config(function ($routeProvider) {
+				$routeProvider
+					.when('/',
+						{
+							controller:'SimpleController',
+							templateUrl:'Partials/Add.html'
+						})
+					.when('/testView',
+						{
+							controller:'SimpleController',
+							templateUrl:'Partials/One.html'
+						})
+					.otherwise ({redirectTo:'/'});
+			});
+
+			
+		</script>
+		
+	</body>
+</html>
