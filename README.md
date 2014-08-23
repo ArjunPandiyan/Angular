@@ -1,2 +1,1 @@
-Angular
-=======
+AngularJS practice application
